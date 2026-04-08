@@ -36,7 +36,7 @@ const Dashboard = () => {
           <BudgetTracker />
         </div>
         {/* Dashboard Recent Transactions */}
-        <div className="w-full mt-0">
+        <div className="w-full mt-8">
           <DashboardRecentTransactions />
         </div>
       </PageLayout>

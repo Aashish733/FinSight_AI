@@ -46,7 +46,6 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        className="!border-black data-[state=checked]:!bg-gray-800 !text-white"
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -54,7 +53,6 @@ export const transactionColumns: ColumnDef<TransactionType>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
-        className="!border-black data-[state=checked]:!bg-gray-800 !text-white"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"

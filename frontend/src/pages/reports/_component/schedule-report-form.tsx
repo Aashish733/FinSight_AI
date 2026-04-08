@@ -188,7 +188,7 @@ const ScheduleReportForm = ({
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full text-white"
+                className="w-full"
               >
                 {isLoading && <Loader className="h-4 w-4 animate-spin" />}
                 Save changes

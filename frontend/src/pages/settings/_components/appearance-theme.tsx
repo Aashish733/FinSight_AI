@@ -82,7 +82,7 @@ export function AppearanceTheme() {
       </div>
       <Button
       type="button"
-      className="mt-4 text-white"
+      className="mt-4"
       onClick={handleUpdateTheme}
       >Update preferences</Button>
     </div>

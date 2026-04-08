@@ -10,7 +10,6 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -47,26 +46,27 @@ const ExpensePieChart = (props: { dateRange?: DateRangeType }) => {
   if (isFetching) {
     return <PieChartSkeleton />;
   }
+  
   // Custom legend component
   const CustomLegend = () => {
     return (
-      <div className="grid grid-cols-1 gap-x-4 gap-y-2 mt-4">
+      <div className="grid grid-cols-1 gap-y-3 mt-8">
         {categories.map((entry, index) => (
-          <div key={`legend-${index}`} className="flex items-center gap-2">
+          <div key={`legend-${index}`} className="flex items-center gap-3 group transition-all">
             <div
-              className="h-3 w-3 rounded-full"
+              className="h-2 w-2 rounded-full shrink-0 shadow-sm"
               style={{ backgroundColor: COLORS[index % COLORS.length] }}
             ></div>
-            <div className="flex justify-between w-full">
-              <span className="text-xs font-medium truncate capitalize">
+            <div className="flex justify-between w-full items-center">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground transition-colors">
                 {entry.name}
               </span>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                <span className="text-xs font-semibold tabular-nums text-foreground">
                   {formatCurrency(entry.value)}
                 </span>
-                <span className="text-xs text-muted-foreground/60">
-                  ({formatPercentage(entry.percentage, { decimalPlaces: 0 })})
+                <span className="text-[10px] tabular-nums text-muted-foreground bg-accent/50 px-1.5 py-0.5 rounded border border-border/50">
+                  {formatPercentage(entry.percentage, { decimalPlaces: 0 })}
                 </span>
               </div>
             </div>
@@ -77,79 +77,83 @@ const ExpensePieChart = (props: { dateRange?: DateRangeType }) => {
   };
 
   return (
-    <Card className="!shadow-none border-1 border-gray-100 dark:border-border">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Expenses Breakdown</CardTitle>
-        <CardDescription>Total expenses {dateRange?.label}</CardDescription>
+    <Card className="border border-border shadow-sm flex flex-col">
+      <CardHeader className="pb-4 border-b border-border bg-accent/5">
+        <CardTitle className="text-lg font-semibold tracking-tight">Expenses Breakdown</CardTitle>
+        <CardDescription className="text-xs">Distribution across categories {dateRange?.label}</CardDescription>
       </CardHeader>
-      <CardContent className="h-[313px]">
-        <div className=" w-full">
+      <CardContent className="flex-1 pt-8 pb-6 overflow-y-auto">
+        <div className="w-full">
           {categories?.length === 0 ? (
-            <EmptyState
-              title="No expenses found"
-              description="There are no expenses recorded for this period."
-            />
+            <div className="min-h-[200px] flex items-center justify-center">
+              <EmptyState
+                title="No expenses found"
+                description="There are no expenses recorded for this period."
+              />
+            </div>
           ) : (
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square h-[300px]"
-            >
-              <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent />}
-                />
+            <>
+              <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square h-[220px] w-full"
+              >
+                <PieChart>
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent className="bg-background border border-border shadow-xl rounded-lg" />}
+                  />
 
-                <Pie
-                  data={categories}
-                  dataKey="value"
-                  nameKey="name"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={2}
-                  strokeWidth={2}
-                  stroke="#fff"
-                >
-                  {categories.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
+                  <Pie
+                    data={categories}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={70}
+                    outerRadius={90}
+                    paddingAngle={4}
+                    strokeWidth={0}
+                  >
+                    {categories.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                        className="transition-opacity hover:opacity-80 outline-none"
+                      />
+                    ))}
 
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
+                    <Label
+                      content={({ viewBox }) => {
+                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                          return (
+                            <text
                               x={viewBox.cx}
                               y={viewBox.cy}
-                              className="fill-foreground text-2xl font-bold"
+                              textAnchor="middle"
+                              dominantBaseline="middle"
                             >
-                              ${totalSpent.toLocaleString()}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 20}
-                              className="fill-muted-foreground text-xs"
-                            >
-                              Total Spent
-                            </tspan>
-                          </text>
-                        );
-                      }
-                    }}
-                  />
-                </Pie>
-                <ChartLegend content={<CustomLegend />} />
-              </PieChart>
-            </ChartContainer>
+                              <tspan
+                                x={viewBox.cx}
+                                y={viewBox.cy}
+                                className="fill-foreground text-3xl font-bold tracking-tighter"
+                              >
+                                {formatCurrency(totalSpent, { compact: true })}
+                              </tspan>
+                              <tspan
+                                x={viewBox.cx}
+                                y={(viewBox.cy || 0) + 20}
+                                className="fill-muted-foreground text-[10px] font-bold uppercase tracking-widest"
+                              >
+                                Total Spent
+                              </tspan>
+                            </text>
+                          );
+                        }
+                      }}
+                    />
+                  </Pie>
+                </PieChart>
+              </ChartContainer>
+              <CustomLegend />
+            </>
           )}
         </div>
       </CardContent>
@@ -158,29 +162,32 @@ const ExpensePieChart = (props: { dateRange?: DateRangeType }) => {
 };
 
 const PieChartSkeleton = () => (
-  <Card className="!shadow-none border-1 border-gray-100 dark:border-border">
-    <CardHeader className="pb-2">
-      <Skeleton className="h-6 w-48" />
-      <Skeleton className="h-4 w-32 mt-1" />
+  <Card className="border border-border shadow-sm">
+    <CardHeader className="pb-4 border-b border-border bg-accent/5">
+      <Skeleton className="h-6 w-48 mb-1" />
+      <Skeleton className="h-3 w-32" />
     </CardHeader>
-    <CardContent className="h-[313px]">
-      <div className="w-full flex items-center justify-center">
-        <div className="relative w-[200px] h-[200px]">
-          <Skeleton className="rounded-full w-full h-full" />
+    <CardContent className="py-8">
+      <div className="w-full flex items-center justify-center mb-8">
+        <div className="relative w-[180px] h-[180px]">
+          <Skeleton className="rounded-full w-full h-full opacity-20" />
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <Skeleton className="h-8 w-24 mb-2" />
-            <Skeleton className="h-4 w-16" />
+            <Skeleton className="h-3 w-16" />
           </div>
         </div>
       </div>
-      <div className="mt-0 space-y-2">
-        {[1, 2, 3, 4].map((i) => (
+      <div className="space-y-4">
+        {[1, 2, 3].map((i) => (
           <div key={i} className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-3 w-3 rounded-full" />
-              <Skeleton className="h-4 w-20" />
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-2 w-2 rounded-full" />
+              <Skeleton className="h-3 w-24" />
             </div>
-            <Skeleton className="h-4 w-12" />
+            <div className="flex gap-2">
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-4 w-10 rounded" />
+            </div>
           </div>
         ))}
       </div>

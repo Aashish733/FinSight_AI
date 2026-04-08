@@ -1,7 +1,7 @@
 import SignUpForm from "./_component/signup-form"
 import Logo from "@/components/logo/logo"
-import dashboardImg from "../../assets/images/dashboard_.png";
-import dashboardImgDark from "../../assets/images/dashboard_dark.png";
+import dashboardImg from "../../assets/images/BG-Light.jpg";
+import dashboardImgDark from "../../assets/images/BG-Dark.jpg";
 import { useTheme } from "@/context/theme-provider";
 
 
@@ -22,23 +22,23 @@ const SignUp = () => {
       <div className="relative hidden bg-muted lg:block -mt-3">
         <div className="absolute inset-0 flex flex-col items-end justify-end pt-8 pl-8">
           <div className="w-full max-w-3xl mx-0 pr-5">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Hi, I'm your AI-powered personal finance app, FinSight!
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground leading-[1.1]">
+              Meet FinSight, your AI-powered <br className="hidden md:block" /> financial co-pilot.
             </h1>
-            <p className="mt-4 text-gray-600 dark:text-muted-foreground">
-              FinSight provides insights, monthly reports, CSV import, recurring transactions, all powered by advanced AI technology. 🚀
+            <p className="mt-4 text-pretty text-muted-foreground max-w-[85%]">
+              Gain deep insights into your spending patterns with automated monthly reports, CSV imports, and intelligent recurring transaction tracking.
             </p>
           </div>
-          <div className="relative max-w-3xl h-full w-full overflow-hidden mt-3 rounded-2xl ring-1 ring-border/60 shadow-xl">
+          <div className="relative max-w-3xl h-full w-full overflow-hidden mt-6 rounded-2xl border border-border/50 shadow-2xl">
             {/* soft glow behind edges */}
-            <div className="pointer-events-none absolute -inset-4 rounded-3xl blur-2xl opacity-25 bg-gradient-to-br from-primary/30 via-emerald-500/10 to-transparent" />
+            <div className="pointer-events-none absolute -inset-4 rounded-3xl blur-3xl opacity-20 bg-gradient-to-br from-primary via-primary/20 to-transparent" />
             <img
               src={theme === "dark" ? dashboardImgDark : dashboardImg}
               alt="Dashboard"
-              className="absolute top-0 left-0 w-full h-full object-cover"
+              className="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500"
               style={{
                 objectPosition: "left top",
-                transform: "scale(1.2)",
+                transform: "scale(1.15)",
                 transformOrigin: "left top",
               }}
             />

@@ -40,11 +40,11 @@ const Navbar = () => {
     <>
       <header
         className={cn(
-          "w-full px-4 py-3 pb-3 lg:px-14 bg-[var(--secondary-dark-color)] text-white ",
-          pathname === PROTECTED_ROUTES.OVERVIEW && "!pb-3"
+          "sticky top-0 z-50 w-full px-4 lg:px-14 bg-background/80 backdrop-blur-md border-b border-border transition-all duration-300",
+          pathname === PROTECTED_ROUTES.OVERVIEW && "py-0"
         )}
       >
-        <div className="w-full flex h-14 max-w-[var(--max-width)] items-center mx-auto">
+        <div className="w-full flex h-16 max-w-[var(--max-width)] items-center mx-auto">
           <div className="w-full flex items-center justify-between">
             {/* Left side - Logo */}
             <div className="flex items-center gap-4">
@@ -52,7 +52,7 @@ const Navbar = () => {
                 variant="ghost"
                 size="icon"
                 className="inline-flex md:hidden !cursor-pointer
-               !bg-white/10 !text-white hover:bg-white/10"
+                 hover:bg-accent hover:text-accent-foreground"
                 onClick={() => setIsOpen(true)}
               >
                 <Menu className="h-6 w-6" />
@@ -62,22 +62,22 @@ const Navbar = () => {
             </div>
 
             {/* Navigation*/}
-            <nav className="hidden md:flex items-center gap-x-2 overflow-x-auto">
+            <nav className="hidden md:flex items-center gap-x-1 overflow-x-auto">
               {routes?.map((route) => (
                 <Button
+                  key={route.href}
                   size="sm"
                   variant="ghost"
                   className={cn(
-                    `w-full lg:w-auto font-normal py-4.5
-                     hover:text-white border-none
-                     text-white/60 focus:bg-white/30
-                     transtion !bg-transparent !text-[14.5px]
+                    `w-full lg:w-auto font-medium px-4 py-2
+                     text-muted-foreground hover:text-foreground hover:bg-transparent
+                     transition-colors rounded-md text-sm
                      `,
-                    pathname === route.href && "text-white"
+                    pathname === route.href && "text-foreground bg-accent/50"
                   )}
                   asChild
                 >
-                  <NavLink key={route.href} to={route.href}>
+                  <NavLink to={route.href}>
                     {route.label}
                   </NavLink>
                 </Button>
@@ -86,22 +86,25 @@ const Navbar = () => {
 
             {/* Mobile Navigation */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetContent side="left" className="bg-white">
-                <nav className="flex flex-col gap-y-2 pt-9">
+              <SheetContent side="left" className="bg-background border-r border-border">
+                <div className="pt-8 px-2 pb-4 border-b border-border mb-4">
+                   <Logo />
+                </div>
+                <nav className="flex flex-col gap-y-1">
                   {routes?.map((route) => (
                     <Button
+                      key={route.href}
                       size="sm"
                       variant="ghost"
                       className={cn(
-                        `w-full font-normal py-4.5
-                       hover:bg-white/10 hover:text-black border-none
-                       text-black/70 focus:bg-white/30
-                       transtion !bg-transparent justify-start`,
-                        pathname === route.href && "!bg-black/10 text-black"
+                        `w-full font-medium py-2.5
+                       hover:bg-accent hover:text-accent-foreground
+                       transition-colors justify-start`,
+                        pathname === route.href && "bg-accent text-accent-foreground"
                       )}
                       asChild
                     >
-                      <NavLink key={route.href} to={route.href}>
+                      <NavLink to={route.href}>
                         {route.label}
                       </NavLink>
                     </Button>

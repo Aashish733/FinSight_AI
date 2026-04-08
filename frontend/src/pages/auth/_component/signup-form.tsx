@@ -55,9 +55,9 @@ const SignUpForm = () => {
         className="flex flex-col gap-6"
       >
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">Sign up to Acme Inc.</h1>
-          <p className="text-balance text-sm text-muted-foreground">
-            Fill information below to sign up
+          <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+          <p className="text-muted-foreground text-sm">
+            Enter your details below to get started with FinSight
           </p>
         </div>
         <div className="grid gap-6">
@@ -81,7 +81,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="m@example.com" autoComplete="email" {...field} />
+                  <Input placeholder="username@example.com" autoComplete="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

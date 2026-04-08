@@ -40,9 +40,6 @@ app.use(
 app.get(
   "/",
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    if (Env.NODE_ENV === "development") {
-      throw new BadRequestException("This is a test error");
-    }
     res.status(HTTPSTATUS.OK).json({
       message: "OK",
     });

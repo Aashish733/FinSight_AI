@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  # --- COMMON SERVICES ---
+  mongo:
+    image: mongo:7
+    container_name: finsight-mongo
+    restart: always
+    ports:
+      - "27017:27017" # Exposed for local tool access (Compass/Robo3T)
+    volumes:
+      - mongo_data:/data/db
+
+  # --- DEVELOPMENT STACK ---
+  # Active by default for development with hot-reloading
+  backend:
+    build:
+      context: ./backend
+      target: development
+    container_name: finsight-backend-dev
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules # Don't overwrite container's node_modules with host's
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    container_name: finsight-frontend-dev
+    restart: always
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # Don't overwrite container's node_modules with host's
+    depends_on:
+      - backend
+
+# --- PRODUCTION STACK (SHOWCASE) ---
+# To use these, uncomment the sections below and comment out the dev sections above.
+# backend-prod:
+#   build:
+#     context: ./backend
+#     target: production
+#   container_name: finsight-backend-prod
+#   restart: always
+#   env_file:
+#     - ./backend/.env
+#   ports:
+#     - "4000:4000"
+#   depends_on:
+#     - mongo
+
+# frontend-prod:
+#   build:
+#     context: ./frontend
+#     target: production
+#   container_name: finsight-frontend-prod
+#   restart: always
+#   ports:
+#     - "80:80"
+#   depends_on:
+#     - backend-prod
+
+volumes:
+  mongo_data:
